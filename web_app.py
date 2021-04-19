@@ -33,8 +33,6 @@ def set_png_as_page_bg(png_file):
     st.markdown(page_bg_img, unsafe_allow_html=True)
     return
 
-set_png_as_page_bg('background.png')
-
 # display app header and sidebar
 # use HTML code to set div
 def display_app_header(main_txt,sub_txt,is_sidebar = False):
@@ -60,7 +58,9 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
 try:
     
     # set bg
-    set_png_as_page_bg("app_bg.png")
+    #set_png_as_page_bg("app_bg.png")
+    set_png_as_page_bg('background.png')
+
     
     # Main panel setup
     display_app_header(main_txt='YS Community CleanUp',
