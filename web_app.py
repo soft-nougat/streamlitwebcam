@@ -13,7 +13,6 @@ import base64
 from webcam import webcam
 import SessionState
 
-@st.cache(allow_output_mutation=True)
 def get_base64_of_bin_file(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -55,6 +54,7 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
         st.markdown(html_temp, unsafe_allow_html = True)
 
 # app setup 
+@st.cache(allow_output_mutation=True)
 try:
     
     # set bg
