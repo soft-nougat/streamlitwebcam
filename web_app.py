@@ -96,9 +96,19 @@ try:
     
     # set bg
     #set_png_as_page_bg("app_bg.png")
-    set_png_as_page_bg('background.png')
-
+    #set_png_as_page_bg('background.png')
     
+    page_bg_img = '''
+    <style>
+    body {
+    background-image: url("https://images.unsplash.com/photo-1542281286-9e0a16bb7366");
+    background-size: cover;
+    }
+    </style>
+    '''
+
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
     # Main panel setup
     display_app_header(main_txt='YS Community CleanUp',
                        sub_txt='Clean up your community!')
