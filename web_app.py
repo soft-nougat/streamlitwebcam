@@ -7,18 +7,56 @@ Created on Mon Apr 19 18:45:07 2021
 
 @author: TNIKOLIC
 """
-
+import pandas as pd
 import streamlit as st
 import base64
 from webcam import webcam
 import SessionState
 
+# ----------------------------------------------
+# session state
+# needs to be refined, session state is used to
+# successfully cache objects so the app runs
+# smoothly
+ss = SessionState.get(output_df = pd.DataFrame(), 
+    df_raw = pd.DataFrame(),
+    _model=None,
+    text_col='text',
+    is_file_uploaded=False,
+    id2word = None, 
+    corpus= None,
+    is_valid_text_feat = False,
+    to_clean_data = False,
+    to_encode = False,
+    to_train = False,
+    to_evaluate = False,
+    to_visualize = False,
+    to_download_report = False,
+    df = pd.DataFrame(),
+    txt = 'Paste the text to analyze here',
+    default_txt = 'Paste the text to analyze here',
+    clean_text = None,
+    ldamodel = None,
+    topics_df = None)
+
+
+# set background, use base64 to read local file
 def get_base64_of_bin_file(bin_file):
+    """
+    function to read png file 
+    ----------
+    bin_file: png -> the background image in local folder
+    """
     with open(bin_file, 'rb') as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
 def set_png_as_page_bg(png_file):
+    """
+    function to display png as bg
+    ----------
+    png_file: png -> the background image in local folder
+    """
     bin_str = get_base64_of_bin_file(png_file)
     page_bg_img = '''
     <style>
