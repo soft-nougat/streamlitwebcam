@@ -54,7 +54,6 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
         st.markdown(html_temp, unsafe_allow_html = True)
 
 # app setup 
-@st.cache(allow_output_mutation=True)
 try:
     
     # set bg
