@@ -11,6 +11,7 @@ Created on Mon Apr 19 18:45:07 2021
 import streamlit as st
 import base64
 from webcam import webcam
+import SessionState
 
 @st.cache(allow_output_mutation=True)
 # set background, use base64 to read local file
