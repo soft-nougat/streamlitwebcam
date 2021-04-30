@@ -1,74 +1,58 @@
 # -*- coding: utf-8 -*-
 """
-
-YS Community CleanUp App 
-
-Created on Mon Apr 19 18:45:07 2021
+Created on Fri Apr 30 08:41:36 2021
 
 @author: TNIKOLIC
 """
-import pandas as pd
-import streamlit as st
+
 import base64
-from webcam import webcam
-import SessionState
+import streamlit as st
+import queue
 
-# ----------------------------------------------
-# session state
-# needs to be refined, session state is used to
-# successfully cache objects so the app runs
-# smoothly
-ss = SessionState.get(output_df = pd.DataFrame(), 
-    df_raw = pd.DataFrame(),
-    _model=None,
-    text_col='text',
-    is_file_uploaded=False,
-    id2word = None, 
-    corpus= None,
-    is_valid_text_feat = False,
-    to_clean_data = False,
-    to_encode = False,
-    to_train = False,
-    to_evaluate = False,
-    to_visualize = False,
-    to_download_report = False,
-    df = pd.DataFrame(),
-    txt = 'Paste the text to analyze here',
-    default_txt = 'Paste the text to analyze here',
-    clean_text = None,
-    ldamodel = None,
-    topics_df = None)
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal  # type: ignore
 
+import av
+import cv2 as cv
+import numpy as np
+import streamlit as st
+from aiortc.contrib.media import MediaPlayer
 
-# set background, use base64 to read local file
-def get_base64_of_bin_file(bin_file):
-    """
-    function to read png file 
-    ----------
-    bin_file: png -> the background image in local folder
-    """
-    with open(bin_file, 'rb') as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+from streamlit_webrtc import (
+    ClientSettings,
+    VideoTransformerBase,
+    WebRtcMode,
+    webrtc_streamer,
+)
 
-def set_png_as_page_bg(png_file):
-    """
-    function to display png as bg
-    ----------
-    png_file: png -> the background image in local folder
-    """
-    bin_str = get_base64_of_bin_file(png_file)
-    page_bg_img = '''
-    <style>
-    body {
-    background-image: url("data:image/png;base64,%s");
-    background-size: cover;
-    }
-    </style>
-    ''' % bin_str
+WEBRTC_CLIENT_SETTINGS = ClientSettings(
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    media_stream_constraints={"video": True, "audio": True},
+)
+
+#FRAME_WINDOW = st.image([])
+
+def set_bg_hack():
+    # set bg name
+    main_bg = "ys_background.png"
+    main_bg_ext = "png"
     
-    st.markdown(page_bg_img, unsafe_allow_html=True)
-    return
+    # we can add a side bg if necessary 
+    #side_bg = "sample.jpg"
+    #side_bg_ext = "jpg"
+        
+    st.markdown(
+         f"""
+         <style>
+         .reportview-container {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()})
+         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
 
 # display app header and sidebar
 # use HTML code to set div
@@ -82,8 +66,8 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
     """
 
     html_temp = f"""
-    <h2 style = "color:#F74369; text_align:center; font-weight: bold;"> {main_txt} </h2>
-    <p style = "color:#BB1D3F; text_align:center;"> {sub_txt} </p>
+    <h2 style = "color:#228B22; text_align:center; font-weight: bold;"> {main_txt} </h2>
+    <p style = "color:#008B8B; text_align:center;"> {sub_txt} </p>
     </div>
     """
     if is_sidebar:
@@ -91,31 +75,55 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
     else: 
         st.markdown(html_temp, unsafe_allow_html = True)
 
-# app setup 
+def app_sendonly():
+    """A sample to use WebRTC in sendonly mode to transfer frames
+    from the browser to the server and to render frames via `st.image`."""
+    webrtc_ctx = webrtc_streamer(
+        key="loopback",
+        mode=WebRtcMode.SENDONLY,
+        client_settings=WEBRTC_CLIENT_SETTINGS
+    )
+    
+    if webrtc_ctx.video_receiver:
+        image_loc = st.empty()
+        while True:
+            try:
+                frame = webrtc_ctx.video_receiver.get_frame(timeout=2)
+                img_rgb = frame.to_ndarray(format="rgb24")
+                image_loc.image(img_rgb)
+                
+            except queue.Empty:
+                print("Queue is empty. Stop the loop.")
+                webrtc_ctx.video_receiver.stop()
+                return img_rgb
+                break
+
+            img_rgb = frame.to_ndarray(format="rgb24")
+            image_loc.image(img_rgb)
+        
+# main app setup 
 try:
     
-    # set bg
-    #set_png_as_page_bg("app_bg.png")
-    set_png_as_page_bg('background.png')
-
-    # Main panel setup
-    display_app_header(main_txt='YS Community CleanUp',
-                       sub_txt='Clean up your community!')
+   set_bg_hack()
     
-    # hide warning for st.pyplot() deprecation
-    #st.set_option('deprecation.showPyplotGlobalUse', False)
+   # Main panel setup
+   display_app_header(main_txt='YS Community CleanUp',
+                      sub_txt='Clean up your community!')
     
-    captured_image = webcam()
-    if captured_image is None:
-        st.write("Waiting for capture...")
-    else:
-        st.write("Got an image from the webcam:")
-        st.image(captured_image)
-    
-    
+   # add input UN ---
+   
+   img_rgb = app_sendonly()
+   
+   if img_rgb is None:
+       st.write("Take a photo!")
+   else: 
+       st.image(img_rgb)
+   
+   # add leaderboard ---
+  
     
 except ValueError:
     st.error("Oops, something went wrong. Please check previous steps for inconsistent input.")
     
-except TypeError:
-     st.error("Oops, something went wrong. Please check previous steps for inconsistent input.")
+#except TypeError:
+     #st.error("Oops, something went wrong. Please check previous steps for inconsistent input.")
