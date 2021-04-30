@@ -15,7 +15,7 @@ except ImportError:
     from typing_extensions import Literal  # type: ignore
 
 import av
-import cv2 as cv
+#import cv2 as cv
 import numpy as np
 import streamlit as st
 from aiortc.contrib.media import MediaPlayer
