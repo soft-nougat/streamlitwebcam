@@ -6,33 +6,61 @@ Created on Fri Apr 30 08:41:36 2021
 """
 
 import base64
-import streamlit as st
-import queue
-
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal  # type: ignore
+import threading
+from typing import Union
 
 import av
-#import cv2 as cv
 import numpy as np
 import streamlit as st
-from aiortc.contrib.media import MediaPlayer
 
-from streamlit_webrtc import (
-    ClientSettings,
-    VideoTransformerBase,
-    WebRtcMode,
-    webrtc_streamer,
-)
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 
-WEBRTC_CLIENT_SETTINGS = ClientSettings(
-    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-    media_stream_constraints={"video": True, "audio": True},
-)
 
-#FRAME_WINDOW = st.image([])
+def main():
+    
+    set_bg_hack()
+    
+    # Main panel setup
+    display_app_header(main_txt='YS Community CleanUp',
+                      sub_txt='Clean up your community!')
+   
+    class VideoTransformer(VideoTransformerBase):
+        frame_lock: threading.Lock  # `transform()` is running in another thread, then a lock object is used here for thread-safety.
+        in_image: Union[np.ndarray, None]
+        out_image: Union[np.ndarray, None]
+
+        def __init__(self) -> None:
+            self.frame_lock = threading.Lock()
+            self.in_image = None
+            self.out_image = None
+
+        def transform(self, frame: av.VideoFrame) -> np.ndarray:
+            in_image = frame.to_ndarray(format="bgr24")
+
+            out_image = in_image[:, ::-1, :]  # Simple flipping for example.
+
+            with self.frame_lock:
+                self.in_image = in_image
+                self.out_image = out_image
+
+            return out_image
+
+    ctx = webrtc_streamer(key="snapshot", video_transformer_factory=VideoTransformer)
+
+    if ctx.video_transformer:
+        if st.button("Snapshot"):
+            with ctx.video_transformer.frame_lock:
+                in_image = ctx.video_transformer.in_image
+                out_image = ctx.video_transformer.out_image
+
+            if in_image is not None and out_image is not None:
+                st.write("Input image:")
+                st.image(in_image, channels="BGR")
+                st.write("Output image:")
+                st.image(out_image, channels="BGR")
+            else:
+                st.warning("No frames available yet.")
+
 
 def set_bg_hack():
     # set bg name
@@ -75,55 +103,7 @@ def display_app_header(main_txt,sub_txt,is_sidebar = False):
     else: 
         st.markdown(html_temp, unsafe_allow_html = True)
 
-def app_sendonly():
-    """A sample to use WebRTC in sendonly mode to transfer frames
-    from the browser to the server and to render frames via `st.image`."""
-    webrtc_ctx = webrtc_streamer(
-        key="loopback",
-        mode=WebRtcMode.SENDONLY,
-        client_settings=WEBRTC_CLIENT_SETTINGS
-    )
-    
-    if webrtc_ctx.video_receiver:
-        image_loc = st.empty()
-        while True:
-            try:
-                frame = webrtc_ctx.video_receiver.get_frame(timeout=2)
-                img_rgb = frame.to_ndarray(format="rgb24")
-                image_loc.image(img_rgb)
-                
-            except queue.Empty:
-                print("Queue is empty. Stop the loop.")
-                webrtc_ctx.video_receiver.stop()
-                return img_rgb
-                break
 
-            img_rgb = frame.to_ndarray(format="rgb24")
-            image_loc.image(img_rgb)
+if __name__ == "__main__":
+    main()
         
-# main app setup 
-try:
-    
-   set_bg_hack()
-    
-   # Main panel setup
-   display_app_header(main_txt='YS Community CleanUp',
-                      sub_txt='Clean up your community!')
-    
-   # add input UN ---
-   
-   img_rgb = app_sendonly()
-   
-   if img_rgb is None:
-       st.write("Take a photo!")
-   else: 
-       st.image(img_rgb)
-   
-   # add leaderboard ---
-  
-    
-except ValueError:
-    st.error("Oops, something went wrong. Please check previous steps for inconsistent input.")
-    
-#except TypeError:
-     #st.error("Oops, something went wrong. Please check previous steps for inconsistent input.")
