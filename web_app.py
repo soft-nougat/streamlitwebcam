@@ -121,12 +121,13 @@ def main():
         
         if gdpr_prompt == 'None':
             
-            st.subheader("Please respond to the GDPR prompt.")
+            display_app_header("Please respond to the GDPR prompt.",
+                               "")
             
         elif gdpr_prompt == 'Decline':
             
-            st.subheader("Sorry to see you leave!")
-            st.write("We are here if you chage your mind.")
+            display_app_header("Sorry to see you leave!",
+                               "We are here if you chage your mind.")
             
         else:
     
@@ -168,7 +169,8 @@ def main():
                         if in_image is not None and out_image is not None:
                             #st.write("Input image:")
                             #st.image(in_image, channels="BGR")
-                            st.write("Output image:")
+                            display_app_header("Output image:",
+                                               "")
                             st.image(out_image, channels="BGR")
                             
                             today = date.today()
@@ -181,13 +183,16 @@ def main():
                             
                             cv2.imwrite(file_name, out_image)
                             
-                            st.write("Object detection:")
+                            display_app_header("Object detection:",
+                                               "")
                             object_detection(file_name)
                         else:
-                            st.warning("No frames available yet.")
+                            display_app_header("No frames available yet.",
+                                               "")
                             
             else:
-                st.write("Please select the type of photo you would like to take.")
+                display_app_header("Please select the type of photo you would like to take.",
+                                   "")
 
 
 def set_bg_hack():
