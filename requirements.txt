@@ -79,7 +79,7 @@ nest-asyncio==1.5.1
 netifaces==0.10.9
 notebook==6.3.0
 numpy==1.20.2
-opencv-python==4.5.1.48
+opencv-python
 os-service-types==1.7.0
 oslo.i18n
 packaging==20.9
