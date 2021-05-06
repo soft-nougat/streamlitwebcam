@@ -3,7 +3,7 @@ aiortc==1.2.0
 alabaster==0.7.12
 altair==4.1.0
 appdirs==1.4.4
-argon2-cffi==20.1.0
+argon2-cffi
 astor==0.8.1
 async-generator==1.10
 atomicwrites==1.4.0
@@ -11,9 +11,9 @@ attrs==20.3.0
 av==8.0.3
 Babel==2.9.0
 backcall==0.2.0
-bandit==1.7.0
+bandit
 base58==2.1.0
-bleach==3.3.0
+bleach
 blinker==1.4
 cachetools==4.2.1
 certifi==2020.12.5
@@ -24,7 +24,7 @@ colorama==0.4.4
 coverage==5.5
 crc32c==2.2
 cryptography==3.4.7
-cycler==0.10.0
+cycler
 darglint==1.8.0
 decorator==5.0.7
 defusedxml==0.7.1
@@ -61,7 +61,7 @@ ipywidgets==7.6.3
 isort==4.3.21
 jedi==0.18.0
 Jinja2==2.11.3
-jsonschema==3.2.0
+jsonschema
 jupyter-client==6.1.12
 jupyter-core==4.7.1
 jupyterlab-pygments==0.1.2
@@ -81,7 +81,7 @@ notebook==6.3.0
 numpy==1.20.2
 opencv-python==4.5.1.48
 os-service-types==1.7.0
-oslo.i18n==5.0.1
+oslo.i18n
 packaging==20.9
 pandas==1.2.4
 pandocfilters==1.4.3
@@ -94,7 +94,7 @@ pillow==8.2.0
 pluggy==0.13.1
 prometheus-client==0.10.1
 prompt-toolkit==3.0.18
-protobuf==3.15.8
+protobuf
 py==1.10.0
 pyarrow==3.0.0
 pycodestyle==2.7.0
@@ -111,7 +111,7 @@ pyreadline3==3.3
 pyrsistent==0.17.3
 pytest==6.2.3
 pytest-cov==2.11.1
-python-dateutil==2.8.0
+python-dateutil
 pytz==2021.1
 pyupgrade==2.12.0
 pywinpty==0.5.7
@@ -121,7 +121,7 @@ regex==2021.4.4
 requests==2.25.1
 restructuredtext-lint==1.3.2
 Send2Trash==1.5.0
-six==1.12.0
+six
 smmap==4.0.0
 snowballstemmer==2.1.0
 Sphinx==2.4.4
@@ -143,7 +143,7 @@ toml==0.10.2
 toolz==0.11.1
 torch==1.8.1
 tornado==6.1
-tox==3.23.0
+tox
 tox-travis==0.12
 tqdm==4.60.0
 traitlets==5.0.5
