@@ -8,11 +8,11 @@ Created on Fri Apr 30 08:41:36 2021
 import base64
 import threading
 from typing import Union
-from PIL import Image
+from pil import Image
 import av
 import numpy as np
 import streamlit as st
-import cv2
+#import cv2
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 from datetime import date
 import time
@@ -181,7 +181,9 @@ def main():
                             
                             file_name = "./output/" + username + "_" + option + "_photo_" + d + "_" + current_time + ".jpg"
                             
-                            cv2.imwrite(file_name, out_image)
+                            out_image = Image.fromarray(out_image)
+                            
+                            out_image.save(file_name)
                             
                             display_app_header("Object detection:",
                                                "")
