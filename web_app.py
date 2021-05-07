@@ -12,16 +12,24 @@ from pil import Image
 import av
 import numpy as np
 import streamlit as st
-#import cv2
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 from datetime import date
 import time
+
+from streamlit_webrtc import (
+    ClientSettings,
+    VideoTransformerBase,
+    webrtc_streamer,
+)
+
+WEBRTC_CLIENT_SETTINGS = ClientSettings(
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    media_stream_constraints={"video": True, "audio": True},
+)
 
 
 def object_detection(image):
     
     from garbage_detection import GarbageImageClassifier
-    from IPython.display import Image
     
     GarbageImageClassifier = GarbageImageClassifier(cuda=False)
     
@@ -158,7 +166,9 @@ def main():
             
                         return out_image
             
-                ctx = webrtc_streamer(key="snapshot", video_transformer_factory=VideoTransformer)
+                ctx = webrtc_streamer(key="snapshot", 
+                                      video_transformer_factory=VideoTransformer,
+                                      client_settings=WEBRTC_CLIENT_SETTINGS)
             
                 if ctx.video_transformer:
                     if st.button("Snapshot"):
@@ -172,6 +182,8 @@ def main():
                             display_app_header("Output image:",
                                                "")
                             st.image(out_image, channels="BGR")
+                            
+                            # set the file name
                             
                             today = date.today()
                             d = today.strftime("%b-%d-%Y")
