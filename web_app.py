@@ -8,7 +8,7 @@ Created on Fri Apr 30 08:41:36 2021
 import base64
 import threading
 from typing import Union
-from pil import Image
+from PIL import Image
 import av
 import numpy as np
 import streamlit as st
