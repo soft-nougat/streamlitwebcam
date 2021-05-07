@@ -80,6 +80,7 @@ netifaces==0.10.9
 notebook==6.3.0
 numpy==1.20.2
 opencv-python
+opencv-contrib-python
 os-service-types==1.7.0
 oslo.i18n
 packaging==20.9
