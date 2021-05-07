@@ -79,10 +79,7 @@ nest-asyncio==1.5.1
 netifaces==0.10.9
 notebook==6.3.0
 numpy==1.20.2
-opencv-python
-opencv-contrib-python
-apt-get upgrade
-apt update && apt install -y libsm6 libxext6 ffmpeg libfontconfig1 libxrender1 libgl1-mesa-glx
+opencv-python==4.5.1.48
 os-service-types==1.7.0
 oslo.i18n
 packaging==20.9
