@@ -1,6 +1,0 @@
-classes=3
-train=./cfg/garb_train.txt
-valid=./cfg/garb_test.txt
-names=./cfg/garb.names
-backup=backup/
-eval=coco
