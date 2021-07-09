@@ -19,13 +19,12 @@ import time
 import cv2
 import tensorflow as tf
 import re
-from tempfile import NamedTemporaryFile
 import os 
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer, ClientSettings
 
 WEBRTC_CLIENT_SETTINGS = ClientSettings(
     rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
-    media_stream_constraints={"video": True, "audio": True},
+    media_stream_constraints={"video": True, "audio": False},
 )
 
 def main():
