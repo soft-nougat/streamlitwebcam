@@ -53,7 +53,16 @@ def streamlit_webrtc_snapshot():
     if ctx.video_transformer:
         if st.button("Snapshot"):
             with ctx.video_transformer.frame_lock:
-                final_image = ctx.video_transformer.out_image
-                return(final_image)
+                out_image = ctx.video_transformer.out_image
+                # If the image is not empty, display it and pass to model
+        if out_image is not None:
+            
+            return(out_image)
+        
+        # In case ICE state is not successful, show warning
+        else:
+            st.warning("No frames available yet.")
+            
+            
 
 

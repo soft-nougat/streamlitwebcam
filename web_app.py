@@ -58,33 +58,19 @@ def main():
         # save photo and pass it to the object detection model
         out_image = snap.streamlit_webrtc_snapshot()
         
-        # If the image is not empty, display it and pass to model
-        if out_image is not None:
-            
-            display_app_header("Your image:",
-                               "")
-            st.image(out_image, channels="BGR")
-               
-            display_app_header("Object detection:",
-                               "")
-            
-            file_name = write_image(out_image)
-     
-            object_detection = detect.display_results(labels, 
-                                                      colors, 
-                                                      height, 
-                                                      width,
-                                                      file_name, 
-                                                      interpreter, 
-                                                      threshold=0.5)
-            
-            st.image(Image.fromarray(object_detection), 
-                     use_column_width=True)
+        file_name = write_image(out_image)
+ 
+        object_detection = detect.display_results(labels, 
+                                                  colors, 
+                                                  height, 
+                                                  width,
+                                                  file_name, 
+                                                  interpreter, 
+                                                  threshold=0.5)
+        
+        st.image(Image.fromarray(object_detection), 
+                 use_column_width=True)
            
-        # In case ICE state is not successful, show warning
-        else:
-            st.warning("No frames available yet.")
-    
     # If option is upload photo, allow upload and pass to model
     elif option == 'Upload photo':
         
