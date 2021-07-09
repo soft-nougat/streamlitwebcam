@@ -58,18 +58,24 @@ def main():
         # save photo and pass it to the object detection model
         out_image = snap.streamlit_webrtc_snapshot()
         
-        file_name = write_image(out_image)
- 
-        object_detection = detect.display_results(labels, 
-                                                  colors, 
-                                                  height, 
-                                                  width,
-                                                  file_name, 
-                                                  interpreter, 
-                                                  threshold=0.5)
+        if out_image is not None:
         
-        st.image(Image.fromarray(object_detection), 
-                 use_column_width=True)
+            file_name = write_image(out_image)
+     
+            object_detection = detect.display_results(labels, 
+                                                      colors, 
+                                                      height, 
+                                                      width,
+                                                      file_name, 
+                                                      interpreter, 
+                                                      threshold=0.5)
+            
+            st.image(Image.fromarray(object_detection), 
+                     use_column_width=True)
+            
+        else:
+            
+            st.warning('Waiting for snapshot to be taken')
            
     # If option is upload photo, allow upload and pass to model
     elif option == 'Upload photo':
