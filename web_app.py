@@ -23,6 +23,10 @@ from tempfile import NamedTemporaryFile
 import os 
 from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 
+WEBRTC_CLIENT_SETTINGS = ClientSettings(
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    media_stream_constraints={"video": True, "audio": True},
+)
 
 def main():
     set_bg_hack()
