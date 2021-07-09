@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Script with webrtc related functions
-Special thanks to whitpx!
+Special thanks to whitphx :)
 """
 import threading
 from typing import Union

@@ -30,13 +30,14 @@ def main():
     
     # Set app header
     text = """
-    
-    Welcome to the Sogeti Object Detection App.
-    <br>This app allows you to take/upload photos and 
-    detect objects in them using a tf lite model.
-    The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>
+    <center> <br> Welcome to the Sogeti Object Detection App. </br> </center>
+    <center> <br> This app allows you to take/upload photos and 
+    detect objects in them using a tf lite model. </br>
+    <br> The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>.
     This model was downloaded from 
     <a href= 'https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2'>this google colab</a>.
+    Special thanks to the author of this notebook <a href = 'https://github.com/sayakpaul'> sayakpaul </a>
+    </center>
     """
     
     display_app_header(main_txt='Object detection app',
@@ -50,9 +51,14 @@ def main():
     # Get all model details
     labels, colors, height, width, interpreter = detect.define_tf_lite_model()
     
+    # Start with app logic:
     if option == 'Take photo':
         
+        # In case Take photo is selected, run the webrtc component, 
+        # save photo and pass it to the object detection model
         out_image = snap.streamlit_webrtc_snapshot()
+        
+        # If the image is not empty, display it and pass to model
         if out_image is not None:
             
             display_app_header("Your image:",
@@ -74,10 +80,12 @@ def main():
             
             st.image(Image.fromarray(object_detection), 
                      use_column_width=True)
-            
+           
+        # In case ICE state is not successful, show warning
         else:
             st.warning("No frames available yet.")
     
+    # If option is upload photo, allow upload and pass to model
     elif option == 'Upload photo':
         
         uploaded_file = st.file_uploader("Upload a photo", type=["jpg","png"])
