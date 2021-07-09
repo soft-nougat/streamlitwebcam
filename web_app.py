@@ -31,9 +31,9 @@ def main():
     # Set app header
     text = """
     <center> <br> Welcome to the Sogeti Object Detection App. </br> </center>
-    <center> <br> This app allows you to take/upload photos and 
-    detect objects in them using a tf lite model. </br>
-    <br> The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>.
+    <center> This app allows you to take/upload photos and 
+    detect objects in them using a tf lite model. 
+    The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>.
     This model was downloaded from 
     <a href= 'https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2'>this google colab</a>.
     Special thanks to the author of this notebook <a href = 'https://github.com/sayakpaul'> sayakpaul </a>
