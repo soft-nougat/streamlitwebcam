@@ -36,7 +36,7 @@ def main():
     The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>.
     This model was downloaded from 
     <a href= 'https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2'>this google colab</a>.
-    Special thanks to the author of this notebook <a href = 'https://github.com/sayakpaul'> sayakpaul </a>
+    Special thanks to the author of this notebook <a href = 'https://github.com/sayakpaul'> sayakpaul </a>.
     </center>
     """
     
@@ -59,7 +59,12 @@ def main():
         out_image = snap.streamlit_webrtc_snapshot()
         
         if out_image is not None:
-        
+            
+            display_app_header("Your photo",
+                                "")
+            
+            st.image(out_image, channels="BGR")
+            
             file_name = write_image(out_image)
      
             object_detection = detect.display_results(labels, 
