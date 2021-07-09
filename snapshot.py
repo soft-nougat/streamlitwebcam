@@ -54,7 +54,6 @@ def streamlit_webrtc_snapshot():
         if st.button("Snapshot"):
             with ctx.video_transformer.frame_lock:
                 final_image = ctx.video_transformer.out_image
-    
-    return(final_image)
+                return(final_image)
 
 
