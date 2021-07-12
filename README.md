@@ -10,11 +10,11 @@ Deployed app on streamlit sharing is [here](https://share.streamlit.io/soft-noug
 
 The app contains 2 major blocks - the webrtc snapshot component and the tf lite object detection part.
 
-Object detection functionality ✨
+## Object detection functionality ✨
 
 The model used is: ssd_mobiledet_cpu_coco_int8.tflite, downloaded from [this](https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2) google colab. The author of this notebook is sayakpaul.
 
-Snapshot functionality 📷
+## Snapshot functionality 📷
 
 The webrtc snapshot functionality was shared in [this](https://discuss.streamlit.io/t/new-component-streamlit-webrtc-a-new-way-to-deal-with-real-time-media-streams/8669/23?u=whitphx) discussion by the author of the component whitphx.
 
