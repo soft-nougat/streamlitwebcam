@@ -106,7 +106,7 @@ def expander():
         <p> Thanks so much to both authors and their amazing work &#129330 </p> 
         """
     
-    expander = st.beta_expander("References", expanded=False)
+    expander = st.beta_expander("References & special thanks", expanded=False)
     
     with expander:
         
