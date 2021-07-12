@@ -149,7 +149,10 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
 
     # =============Display the results====================
     original_numpy = original_image.numpy()
+    counter = 0
     for obj in results:
+        # set counter of text
+        counter = counter + 1
         # Convert the bounding box figures from relative coordinates
         # to absolute coordinates based on the original resolution
         ymin, xmin, ymax, xmax = obj['bounding_box']
@@ -174,9 +177,11 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
         cv2.putText(original_numpy, label, (xmin, y),
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
         
-        st.write(obj['class_id'])
-        st.write(obj['score'])
-        #help.sub_text('Detected' + obj['class_id'] + obj['score'])
+        display_text = [counter + ') The model has detected a(an): ' + 
+                        LABELS[obj['class_id']] + ' with ' + 
+                        obj['score'] * 100 + ' confidence.']
+       
+        help.sub_text(display_text)
 
     # Return the final image
     if (input_type==np.float32) & (original_numpy.max()==1.0):
