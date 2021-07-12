@@ -177,11 +177,10 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
         
         score = obj['score'] * 100
-        display_text = [str(counter) + ') The model has detected a(an): ' + 
-                        LABELS[obj['class_id']] + ' with ' + 
-                        str(score) + ' confidence.']
        
-        help.sub_text(display_text)
+        help.sub_text(str(counter) + ') The model has detected a(an): ' + 
+                      LABELS[obj['class_id']] + ' with ' + 
+                      str(score) + ' confidence.')
 
     # Return the final image
     if (input_type==np.float32) & (original_numpy.max()==1.0):
