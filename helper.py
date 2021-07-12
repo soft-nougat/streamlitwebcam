@@ -97,12 +97,12 @@ def expander():
         <p> The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>, downloaded from 
         <a href= 'https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2' style="color:#F26531;" >this google colab</a>.
         The author of this notebook is
-        <a href = 'https://github.com/sayakpaul' style="color:#F26531;> sayakpaul </a>. </p>
+        <a href = 'https://github.com/sayakpaul' style="color:#F26531;" > sayakpaul </a>. </p>
         <p> Snapshot functionality &#128247 </p>
         <p> The webrtc snapshot functionality was shared in 
-        <a href = 'https://discuss.streamlit.io/t/new-component-streamlit-webrtc-a-new-way-to-deal-with-real-time-media-streams/8669/23?u=whitphx' style="color:#F26531;> this discussion </a> 
+        <a href = 'https://discuss.streamlit.io/t/new-component-streamlit-webrtc-a-new-way-to-deal-with-real-time-media-streams/8669/23?u=whitphx'  style="color:#F26531;" > this discussion </a> 
         by the author of the component 
-        <a href = 'https://github.com/whitphx' style="color:#F26531;> whitphx </a>. </p> 
+        <a href = 'https://github.com/whitphx'  style="color:#F26531;" > whitphx </a>. </p> 
         <p> Thanks so much to both authors and their amazing work &#129330 </p> 
         """
     
