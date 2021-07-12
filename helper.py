@@ -99,7 +99,7 @@ def expander():
         The author of this notebook is
         <a href = 'https://github.com/sayakpaul'> sayakpaul </a>. </p>
         <p> <b> Snapshot functionality </b> </p>
-        The webrtc snapshot functionality was shared in 
+        <p> The webrtc snapshot functionality was shared in 
         <a href = 'https://discuss.streamlit.io/t/new-component-streamlit-webrtc-a-new-way-to-deal-with-real-time-media-streams/8669/23?u=whitphx'> this discussion </a> 
         by the author of the component 
         <a href = 'https://github.com/whitphx'> whitphx </a>. </p> 
