@@ -176,10 +176,11 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
         cv2.putText(original_numpy, label, (xmin, y),
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
         
-        score = obj['score'] * 100
-        display_text = [counter + ') The model has detected a(an): ' + 
+        counter_text = counter,')'
+        score = obj['score'] * 100, 'confidence.'
+        display_text = [counter_text + ' The model has detected a(an): ' + 
                         LABELS[obj['class_id']] + ' with ' + 
-                        score + ' confidence.']
+                        score]
        
         help.sub_text(display_text)
 
