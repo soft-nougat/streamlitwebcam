@@ -7,7 +7,6 @@ Reference google colab: https://colab.research.google.com/github/sayakpaul/Adven
 Special thanks to the author of the colab - sayakpaul :)
 
 """
-import streamlit as st
 import numpy as np
 import cv2
 import tensorflow as tf
