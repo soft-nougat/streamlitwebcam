@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """
+
 Script with webrtc related functions
+
 Special thanks to whitphx :)
+
 """
 import threading
 from typing import Union
@@ -45,11 +48,13 @@ def streamlit_webrtc_snapshot():
                     self.out_image = out_image
     
                 return out_image
-        
+    
+    # call streamer
     ctx = webrtc_streamer(key="snapshot", 
                           client_settings=WEBRTC_CLIENT_SETTINGS,
                           video_transformer_factory=VideoTransformer)
-
+    
+    # apply logic - if user takes snapshot, output image
     if ctx.video_transformer:
         if st.button("Snapshot"):
             with ctx.video_transformer.frame_lock:

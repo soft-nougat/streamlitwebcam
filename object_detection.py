@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 """
+
 Script with tf lite model related functions (all functions taken from below colab)
 Model used: ssd_mobiledet_cpu_coco_int8.tflite
 Reference google colab: https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2
 Special thanks to the author of the colab - sayakpaul :)
+
 """
 import numpy as np
-import time
 import cv2
 import tensorflow as tf
 import re
+import helper as help
 
 def define_tf_lite_model():
     '''
@@ -32,7 +34,11 @@ def define_tf_lite_model():
     return(LABELS, COLORS, HEIGHT, WIDTH, interpreter)
 
 def load_labels(path):
-  """Loads the labels file. Supports files with or without index numbers."""
+  '''
+  
+  Open labels from root folder
+  
+  ''' 
   with open(path, 'r', encoding='utf-8') as f:
     lines = f.readlines()
     labels = {}
@@ -45,7 +51,11 @@ def load_labels(path):
   return labels
 
 def set_input_tensor(interpreter, image):
-  """Sets the input tensor."""
+  '''
+  
+  Set input tensor, call interpreter and get input details
+  
+  '''
   tensor_index = interpreter.get_input_details()[0]['index']
   input_tensor = interpreter.tensor(tensor_index)()[0]
   if interpreter.get_input_details()[0]["dtype"]==np.uint8:
@@ -55,14 +65,22 @@ def set_input_tensor(interpreter, image):
 
 
 def get_output_tensor(interpreter, index):
-  """Returns the output tensor at the given index."""
+  '''
+  
+  Get the output tensor
+  
+  '''
   output_details = interpreter.get_output_details()[index]
   tensor = np.squeeze(interpreter.get_tensor(output_details['index']))
   return tensor
 
 
 def detect_objects(interpreter, image, threshold):
-  """Returns a list of detection results, each a dictionary of object info."""
+  '''
+  
+  Returns a list of detection results
+  
+  '''
   set_input_tensor(interpreter, image)
   interpreter.invoke()
 
@@ -84,6 +102,11 @@ def detect_objects(interpreter, image, threshold):
   return results
 
 def preprocess_image(HEIGHT, WIDTH, image_path, input_type=np.float32):
+    '''
+    
+    Reads image from file path and converts to tf readable
+    
+    '''
     img = tf.io.read_file(image_path)
     img = tf.io.decode_image(img, channels=3)
     original_image = img
@@ -96,14 +119,32 @@ def preprocess_image(HEIGHT, WIDTH, image_path, input_type=np.float32):
     return resized_img, original_image
 
 def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, threshold=0.1):
+    '''
+    
+    Main function to read and prepare input, draw boxes and return image
+    
+    Parameters
+    ----------
+    LABELS : Labels defined in load_labels()
+    COLORS : Colors defined in define_tf_lite_model()
+    HEIGHT : Image height defined in define_tf_lite_model()
+    WIDTH : Image width in define_tf_lite_model()
+    image_path : Where to get the image from, in this app TempDir
+    interpreter : Interpreter defined in define_tf_lite_model()
+    threshold : TYPE, optional
+        DESCRIPTION. The default is 0.1.
+
+    Returns
+    -------
+    original_numpy : Image with bouding boxes and detected objects
+
+    '''
     # Load the input image and preprocess it
     input_type = interpreter.get_input_details()[0]['dtype']
     preprocessed_image, original_image = preprocess_image(HEIGHT, WIDTH, image_path, input_type)
     
     # =============Perform inference=====================
-    start_time = time.monotonic()
     results = detect_objects(interpreter, preprocessed_image, threshold=threshold)
-    print(f"Elapsed time: {(time.monotonic() - start_time)*1000} miliseconds")
 
     # =============Display the results====================
     original_numpy = original_image.numpy()
@@ -130,7 +171,9 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
         label = "{}: {:.2f}%".format(LABELS[obj['class_id']],
             obj['score'] * 100)
         cv2.putText(original_numpy, label, (xmin, y),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+        
+        help.sub_text('Detected' + obj['class_id'] + obj['score'])
 
     # Return the final image
     if (input_type==np.float32) & (original_numpy.max()==1.0):
