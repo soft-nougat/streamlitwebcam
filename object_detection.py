@@ -7,6 +7,7 @@ Reference google colab: https://colab.research.google.com/github/sayakpaul/Adven
 Special thanks to the author of the colab - sayakpaul :)
 
 """
+import streamlit as st
 import numpy as np
 import cv2
 import tensorflow as tf
@@ -173,7 +174,9 @@ def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, thre
         cv2.putText(original_numpy, label, (xmin, y),
             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
         
-        help.sub_text('Detected' + obj['class_id'] + obj['score'])
+        st.write(obj['class_id'])
+        st.write(obj['score'])
+        #help.sub_text('Detected' + obj['class_id'] + obj['score'])
 
     # Return the final image
     if (input_type==np.float32) & (original_numpy.max()==1.0):
