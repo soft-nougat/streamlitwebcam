@@ -93,15 +93,17 @@ def expander():
     '''
     
     expander_text = """
-        The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>, downloaded from 
+        <p> <b> Object detection functionality </b> </p>
+        <p> The model used is: <b>ssd_mobiledet_cpu_coco_int8.tflite</b>, downloaded from 
         <a href= 'https://colab.research.google.com/github/sayakpaul/Adventures-in-TensorFlow-Lite/blob/master/MobileDet_Conversion_TFLite.ipynb#scrollTo=_rz1wbDv58t2'>this google colab</a>.
         The author of this notebook is
-        <a href = 'https://github.com/sayakpaul'> sayakpaul </a>.
+        <a href = 'https://github.com/sayakpaul'> sayakpaul </a>. </p>
+        <p> <b> Snapshot functionality </b> </p>
         The webrtc snapshot functionality was shared in 
         <a href = 'https://discuss.streamlit.io/t/new-component-streamlit-webrtc-a-new-way-to-deal-with-real-time-media-streams/8669/23?u=whitphx'> this discussion </a> 
         by the author of the component 
-        <a href = 'https://github.com/whitphx'> whitphx </a>.
-        Thanks so much to both authors and their amazing work :open_hands:
+        <a href = 'https://github.com/whitphx'> whitphx </a>. </p> 
+        <br> Thanks so much to both authors and their amazing work &#129330 </br> 
         """
     
     expander = st.beta_expander("References", expanded=False)
