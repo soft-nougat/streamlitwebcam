@@ -13,6 +13,74 @@ import tensorflow as tf
 import re
 import helper as help
 
+def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, threshold):
+    '''
+    
+    Main function to read and prepare input, draw boxes and return image
+    
+    Parameters
+    ----------
+    LABELS : Labels defined in load_labels()
+    COLORS : Colors defined in define_tf_lite_model()
+    HEIGHT : Image height defined in define_tf_lite_model()
+    WIDTH : Image width in define_tf_lite_model()
+    image_path : Where to get the image from, in this app TempDir
+    interpreter : Interpreter defined in define_tf_lite_model()
+    threshold : The accuracy threshold.
+
+    Returns
+    -------
+    original_numpy : Image with bouding boxes and detected objects
+
+    '''
+    # Load the input image and preprocess it
+    input_type = interpreter.get_input_details()[0]['dtype']
+    preprocessed_image, original_image = preprocess_image(HEIGHT, WIDTH, image_path, input_type)
+    
+    # =============Perform inference=====================
+    results = detect_objects(interpreter, preprocessed_image, threshold=threshold)
+
+    # =============Display the results====================
+    original_numpy = original_image.numpy()
+    counter = 0
+    for obj in results:
+        # set counter of text
+        counter = counter + 1
+        # Convert the bounding box figures from relative coordinates
+        # to absolute coordinates based on the original resolution
+        ymin, xmin, ymax, xmax = obj['bounding_box']
+        xmin = int(xmin * original_numpy.shape[1])
+        xmax = int(xmax * original_numpy.shape[1])
+        ymin = int(ymin * original_numpy.shape[0])
+        ymax = int(ymax * original_numpy.shape[0])
+
+        # Grab the class index for the current iteration
+        idx = int(obj['class_id'])
+        # Skip the background
+        if idx >= len(LABELS):
+            continue
+
+        # Draw the bounding box and label on the image
+        color = [int(c) for c in COLORS[idx]]
+        cv2.rectangle(original_numpy, (xmin, ymin), (xmax, ymax), 
+                    color, 2)
+        y = ymin - 15 if ymin - 15 > 15 else ymin + 15
+        label = "{}: {:.2f}%".format(LABELS[obj['class_id']],
+            obj['score'] * 100)
+        cv2.putText(original_numpy, label, (xmin, y),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+        
+        score = obj['score'] * 100
+       
+        help.sub_text(str(counter) + ') The model has detected a(an): ' + 
+                      LABELS[obj['class_id']] + ' with ' + 
+                      str(score) + ' confidence.')
+
+    # Return the final image
+    if (input_type==np.float32) & (original_numpy.max()==1.0):
+        original_numpy = (original_numpy * 255).astype(np.uint8)
+    return original_numpy
+
 def define_tf_lite_model():
     '''
     
@@ -117,72 +185,3 @@ def preprocess_image(HEIGHT, WIDTH, image_path, input_type=np.float32):
     resized_img = tf.image.resize(img, (HEIGHT, WIDTH))
     resized_img = resized_img[tf.newaxis, :]
     return resized_img, original_image
-
-def display_results(LABELS, COLORS, HEIGHT, WIDTH, image_path, interpreter, threshold=0.1):
-    '''
-    
-    Main function to read and prepare input, draw boxes and return image
-    
-    Parameters
-    ----------
-    LABELS : Labels defined in load_labels()
-    COLORS : Colors defined in define_tf_lite_model()
-    HEIGHT : Image height defined in define_tf_lite_model()
-    WIDTH : Image width in define_tf_lite_model()
-    image_path : Where to get the image from, in this app TempDir
-    interpreter : Interpreter defined in define_tf_lite_model()
-    threshold : TYPE, optional
-        DESCRIPTION. The default is 0.1.
-
-    Returns
-    -------
-    original_numpy : Image with bouding boxes and detected objects
-
-    '''
-    # Load the input image and preprocess it
-    input_type = interpreter.get_input_details()[0]['dtype']
-    preprocessed_image, original_image = preprocess_image(HEIGHT, WIDTH, image_path, input_type)
-    
-    # =============Perform inference=====================
-    results = detect_objects(interpreter, preprocessed_image, threshold=threshold)
-
-    # =============Display the results====================
-    original_numpy = original_image.numpy()
-    counter = 0
-    for obj in results:
-        # set counter of text
-        counter = counter + 1
-        # Convert the bounding box figures from relative coordinates
-        # to absolute coordinates based on the original resolution
-        ymin, xmin, ymax, xmax = obj['bounding_box']
-        xmin = int(xmin * original_numpy.shape[1])
-        xmax = int(xmax * original_numpy.shape[1])
-        ymin = int(ymin * original_numpy.shape[0])
-        ymax = int(ymax * original_numpy.shape[0])
-
-        # Grab the class index for the current iteration
-        idx = int(obj['class_id'])
-        # Skip the background
-        if idx >= len(LABELS):
-            continue
-
-        # Draw the bounding box and label on the image
-        color = [int(c) for c in COLORS[idx]]
-        cv2.rectangle(original_numpy, (xmin, ymin), (xmax, ymax), 
-                    color, 2)
-        y = ymin - 15 if ymin - 15 > 15 else ymin + 15
-        label = "{}: {:.2f}%".format(LABELS[obj['class_id']],
-            obj['score'] * 100)
-        cv2.putText(original_numpy, label, (xmin, y),
-            cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
-        
-        score = obj['score'] * 100
-       
-        help.sub_text(str(counter) + ') The model has detected a(an): ' + 
-                      LABELS[obj['class_id']] + ' with ' + 
-                      str(score) + ' confidence.')
-
-    # Return the final image
-    if (input_type==np.float32) & (original_numpy.max()==1.0):
-        original_numpy = (original_numpy * 255).astype(np.uint8)
-    return original_numpy
