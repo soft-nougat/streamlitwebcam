@@ -2,7 +2,7 @@
 
 This repository is home to the webrtc snapshot object detection Stremlit app. That was a mouthful, right? :D
 
-The tutorial for building this app is published on Medium (TBD).
+The tutorial for building this app is published on [Medium](https://medium.com/sogetiblogsnl/streamlit-to-the-rescue-7d5f2f663465).
 
 Deployed app on streamlit sharing is [here](https://share.streamlit.io/soft-nougat/streamlitwebcam/main/web_app.py). 
 
